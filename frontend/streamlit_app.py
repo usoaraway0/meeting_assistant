@@ -4,7 +4,7 @@ import time
 import os
 
 # 后端API的地址
-BACKEND_URL = "http://127.0.0.1:8000"
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 
 st.set_page_config(layout="wide")
 st.title("🤖 终极AI会议助手")
