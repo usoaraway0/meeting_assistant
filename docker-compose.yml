@@ -1,0 +1,43 @@
+# 定义我们应用中的所有服务
+services:
+  # 第一个服务，我们叫它 backend
+  backend:
+    # 告诉Compose如何构建这个服务的镜像
+    # context指向包含Dockerfile的目录
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    # 给这个容器起个名字，方便管理
+    container_name: meeting_assistant_backend
+    # 将我们本地的.env文件内容作为环境变量传给容器
+    env_file:
+      - ./backend/.env
+    # 端口映射：将物理主机的8000端口映射到容器的8000端口
+    ports:
+      - "8000:8000"
+    # 数据卷挂载：将本地文件夹映射到容器内部
+    # 这使得代码修改可以热重载，并且数据可以持久化
+    volumes:
+      - ./backend/app:/app/app
+      - ./uploads:/app/uploads
+      - ./knowledge_base_storage:/app/knowledge_base_storage
+    # 重启策略：如果容器意外退出，总是自动重启
+    restart: always
+
+  # 第二个服务，我们叫它 frontend
+  frontend:
+    # 构建前端服务的镜像
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: meeting_assistant_frontend
+    # 端口映射：将物理主机的8501端口映射到容器的8501端口
+    ports:
+      - "8501:8501"
+    # 代码热重载的数据卷
+    volumes:
+      - ./frontend:/app
+    # 关键！这告诉Compose，必须等backend服务健康启动后，才能启动frontend服务
+    depends_on:
+      - backend
+    restart: always

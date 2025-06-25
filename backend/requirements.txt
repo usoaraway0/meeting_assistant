@@ -1,0 +1,21 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+langchain
+langchain-core
+langchain-google-genai
+langchain-community
+langchain-text-splitters
+# 移除了 langchain-openai 和 openai
+langgraph
+pypdf
+faiss-cpu
+python-docx
+unstructured[all-docs]
+langchain-tavily
+pytesseract
+
+# --- 新增本地语音处理依赖 ---
+faster-whisper
+torch
+torchaudio

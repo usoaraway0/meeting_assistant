@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+.env.*
+
+# Virtual Environments
+/LangChain/
+/venv/
+.venv/
+env/
+venv/
+ENV/
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Local files
+/uploads/
+/knowledge_base_storage/
+/my_faiss_index/

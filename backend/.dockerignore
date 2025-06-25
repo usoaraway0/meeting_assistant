@@ -1,0 +1,22 @@
+# Git
+.git
+.gitignore
+
+# Virtual Environment
+/LangChain/
+/venv/
+.venv/
+env/
+venv/
+ENV/
+
+# IDE and cache files
+__pycache__/
+.vscode/
+.idea/
+
+# Local data and secrets
+.env
+/uploads/
+/knowledge_base_storage/
+/my_faiss_index/
