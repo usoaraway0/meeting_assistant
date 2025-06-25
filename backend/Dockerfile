@@ -24,6 +24,11 @@ WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
+# 复制下载模型的脚本到容器中
+# 这个脚本会在容器启动时运行，确保模型已经下载好
+COPY download_model.py .
+RUN python download_model.py
+
 # 复制你的应用代码到容器中
 COPY ./app /app/app
 

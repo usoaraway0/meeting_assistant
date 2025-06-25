@@ -46,6 +46,16 @@ def run_workflow(job_id: str, audio_path: str, transcript_dir: str, api_key: str
     initial_state = {"audio_path": audio_path, "google_api_key": api_key}
     
     final_state = langgraph_app.invoke(initial_state, config=config)
+    
+    # 【核心修正】检查工作流是否因为失败而提前结束
+    if final_state.get("error"):
+        jobs[job_id] = {
+            "status": "failed", 
+            "summary": "处理失败",
+            "action_items": [f"错误: {final_state['error']}"],
+            "transcript": "处理失败，未生成文字稿"
+        }
+        return
 
     transcript_path = os.path.join(transcript_dir, "transcript.txt")
     with open(transcript_path, "w") as f:
