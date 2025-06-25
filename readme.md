@@ -1,6 +1,7 @@
 # 终极AI会议助手 (Ultimate AI Meeting Assistant)
 
-![Demo GIF](placeholder.gif)  这是一个全栈AI应用，旨在将会议音频自动化地处理成结构化的、可查询的知识。用户可以上传会议录音，系统会自动完成语音转文字、生成会议摘要、提取待办事项，并允许用户就本次会议内容进行对话式问答。
+![Demo GIF of the App](https://user-images.githubusercontent.com/your-id/your-repo/demo.gif) 
+这是一个全栈AI应用，旨在将会议音频自动化地处理成结构化的、可查询的知识。用户可以上传会议录音，系统会自动完成语音转文字、生成会议摘要、提取待办事项，并允许用户就本次会议内容进行对话式问答。
 
 ## 🚀 核心功能 (Key Features)
 
@@ -9,14 +10,14 @@
 - **高级RAG问答**: 采用`ParentDocumentRetriever`策略，提供上下文更丰富、更精准的问答体验。
 - **异步处理**: 后端采用FastAPI后台任务处理耗时操作，前端UI不卡顿。
 - **前后端分离**: 清晰的Web服务架构，前端(Streamlit)与后端(FastAPI)分离，易于维护和扩展。
-- **可移植部署**: 整个后端服务已完全Docker化，实现一键部署和运行。
+- **一键启动**: 整个应用（前后端）已完全Docker化，通过`docker compose`实现一键部署和运行。
 
 ## 🛠️ 技术栈 (Tech Stack)
 
 - **后端**: `FastAPI`, `Uvicorn`, `LangChain`, `LangGraph`, `Google Gemini`, `faster-whisper`
 - **前端**: `Streamlit`
 - **向量存储**: `FAISS`
-- **部署**: `Docker`
+- **部署**: `Docker`, `Docker Compose`
 - **开发环境**: `Python 3.12`, `uv`
 
 ## 🏗️ 项目架构 (Architecture)
@@ -66,46 +67,27 @@ graph TD
 ## ⚙️ 如何运行 (Getting Started)
 
 ### 1. 环境准备
+- 已安装 [Docker](https://www.docker.com/) 和 [Docker Compose](https://docs.docker.com/compose/install/)。
+- 一个 Google Gemini API Key。
 
-- 安装 [Docker](https://www.docker.com/)
-- 安装 `Python 3.12+`
-- 一个 Google Gemini API Key
-- （可选）一个 OpenAI API Key（如果你想用OpenAI的Whisper API而不是本地版）
-
-### 2. 后端设置与启动
-
+### 2. 设置
 ```bash
-# 1. 克隆仓库
+# 1. 克隆本仓库
 git clone [https://github.com/your-username/ultimate-meeting-assistant.git](https://github.com/your-username/ultimate-meeting-assistant.git)
-cd ultimate_meeting_assistant/backend
+cd ultimate-meeting-assistant
 
 # 2. 创建并配置 .env 文件
-# 复制 .env.example (你需要自己创建一个) 为 .env
+# 进入后端目录，复制示例文件
+cd backend
 cp .env.example .env
-# 然后填入你的API Keys
-# GOOGLE_API_KEY="your-google-api-key"
 
-# 3. 构建Docker镜像
-docker build -t meeting-assistant-backend .
-
-# 4. 运行Docker容器
-docker run -p 8000:8000 --env-file .env -v "<span class="math-inline">\(pwd\)/uploads\:/app/uploads" \-v "</span>(pwd)/knowledge_base_storage:/app/knowledge_base_storage" meeting-assistant-backend
+# 然后用你的编辑器打开 .env 文件，填入你的API Key
+# GOOGLE_API_KEY="your-google-api-key-here"
 ```
 
-### 3. 前端启动
-
+### 3. 一键启动
+在项目**根目录** (`ultimate_meeting_assistant/`)下，运行以下命令：
 ```bash
-# 1. 进入前端目录
-cd ../frontend
-
-# 2. (可选) 创建并激活虚拟环境
-python -m venv venv
-source venv/bin/activate
-
-# 3. 安装依赖
-uv pip install -r requirements.txt
-
-# 4. 启动Streamlit应用
-streamlit run streamlit_app.py --server.address=0.0.0.0
+docker compose up --build
 ```
-现在，在你物理主机的浏览器中访问 `http://<你的IP地址>:8501` 即可使用。
+等待所有镜像构建完成和服务启动后，在你的浏览器中访问 `http://localhost:8501` 即可开始使用。
