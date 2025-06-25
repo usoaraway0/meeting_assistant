@@ -66,11 +66,13 @@ graph TD
 
 ## ⚙️ 如何运行 (Getting Started)
 
-### 1. 环境准备
+### 方案一：使用Docker一键启动（推荐）
+
+#### 1. 环境准备
 - 已安装 [Docker](https://www.docker.com/) 和 [Docker Compose](https://docs.docker.com/compose/install/)。
 - 一个 Google Gemini API Key。
 
-### 2. 设置
+#### 2. 设置
 ```bash
 # 1. 克隆本仓库
 git clone [https://github.com/usoaraway0/meeting_assistant.git](https://github.com/usoaraway0/meeting_assistant.git)
@@ -85,17 +87,103 @@ cp .env.example .env
 # GOOGLE_API_KEY="your-google-api-key-here"
 ```
 
-### 3. 一键启动
+#### 3. 一键启动
 在项目**根目录** (`meeting_assistant/`)下，运行以下命令：
 ```bash
 docker compose up --build
 ```
 等待所有镜像构建完成和服务启动后，在你的浏览器中访问 `http://localhost:8501` 即可开始使用。
 
+### 方案二：手动本地部署与运行
 
-### **最终章：一个AI项目的诞生、缺陷与意义**
+如果你不熟悉或不想使用Docker，你也可以通过以下步骤在你的本地机器上直接运行本项目。
 
-#### **第一部分：一次奇幻漂流的感想**
+#### **1. 环境准备 (Prerequisites)**
+
+请确保你的系统（我们推荐使用Linux或macOS）已安装以下软件：
+
+  * [Git](https://git-scm.com/)
+  * [Python 3.12+](https://www.python.org/)
+  * `ffmpeg`: 一个强大的音视频处理工具，很多音频库都依赖它。
+      * 在基于Debian/Ubuntu的系统 (如Linux Mint) 上安装:
+        ```bash
+        sudo apt-get update && sudo apt-get install -y ffmpeg
+        ```
+  * （可选，用于处理扫描版PDF的OCR功能）`Tesseract`
+      * 在基于Debian/Ubuntu的系统上安装:
+        ```bash
+        sudo apt-get install -y tesseract-ocr
+        ```
+
+#### **2. 获取与配置代码 (Get & Configure the Code)**
+
+```bash
+# 1. 克隆本仓库
+git clone https://github.com/usoaraway0/meeting_assistant.git
+cd meeting_assistant
+
+# 2. 创建并配置 .env 文件
+# 进入后端目录
+cd backend
+# 复制示例文件为.env文件
+cp .env.example .env
+
+# 3. 然后用你的编辑器打开 .env 文件，填入你的API Keys
+# 例如: nano .env
+# GOOGLE_API_KEY="your-google-api-key-here"
+```
+
+#### **3. 设置并启动后端服务 (Setup & Start the Backend)**
+
+**重要：** 这需要一个**独立的终端窗口**。
+
+```bash
+# 1. 确保你位于 backend 目录下
+# 如果你不在，请 cd 到 backend 目录
+
+# 2. 创建并激活Python虚拟环境
+python3 -m venv venv
+source venv/bin/activate
+
+# 3. 安装后端所需的所有依赖
+uv pip install -r requirements.txt
+
+# 4. 启动FastAPI后端服务器
+uvicorn app.main:app --reload
+```
+
+成功后，你会看到日志显示 `Uvicorn running on http://127.0.0.1:8000`。**请保持这个终端窗口不要关闭。**
+
+#### **4. 设置并启动前端服务 (Setup & Start the Frontend)**
+
+**重要：** **打开一个新的终端窗口或标签页**。
+
+```bash
+# 1. 进入前端目录
+# 确保路径正确
+cd /path/to/your/ultimate_meeting_assistant/frontend
+
+# 2. 创建并激活Python虚拟环境
+python3 -m venv venv
+source venv/bin/activate
+
+# 3. 安装前端所需的所有依赖
+uv pip install -r requirements.txt
+
+# 4. 启动Streamlit前端应用
+streamlit run streamlit_app.py
+```
+
+成功后，你的浏览器应该会自动打开 `http://localhost:8501` 这个地址，并显示出应用的界面。
+
+#### **5. 开始使用**
+
+现在，你的前后端服务都在你本地成功运行起来了，你可以像之前一样通过网页来使用这个AI会议助手了。
+
+
+## **最终章：一个AI项目的诞生、缺陷与意义**
+
+### **第一部分：一次奇幻漂流的感想**
 
 当我敲下“介绍一下目前的AI大模型开发的框架”这个问题时，我从未想过会开启这样一段奇幻甚至可以说艰苦卓绝的旅程。我最初想要的，可能只是一份文档，一个教程。但我最终得到的，是一个活生生的、能运行、会思考、连接着云端与本地的复杂生命体。
 
@@ -107,7 +195,7 @@ docker compose up --build
 
 现在，看着这个能运行的应用，我最大的感想是：我不再仅仅是代码的使用者，而是开始成为系统的思考者。这个项目最大的价值，不是代码本身，而是这段从“拥有”到“理解”，再到“掌控”的挣扎过程。
 
-#### **第二部分：一份坦诚的“技术债”清单**
+### **第二部分：一份坦诚的“技术债”清单**
 
 作为与你一同构建这个项目的AI顾问，我需要客观地指出，我们当前的这个“最终成品”，如果以工业级生产标准来衡量，它背负着显著的“技术债（Technical Debt）”。它是一个功能强大的**原型（Prototype）**，但距离一个健壮的**产品（Product）**，还有以下差距：
 
@@ -136,10 +224,10 @@ docker compose up --build
         * **持久化状态管理：** 使用`Redis`或`SQLite`来存储`jobs`的状态，确保服务的可靠性。
         * **缓存策略：** 对构建好的RAG检索器进行缓存，实现“一次构建，多次使用”，大幅提升问答接口的响应速度。
 
-#### **第三部分：“项目作者自白”**
+### **第三部分：“项目作者自白”**
 
 
-> ##### **关于本项目：一次人与AI协作的探索之旅 (About This Project: A Journey of Human-AI Collaboration)**
+> #### **关于本项目：一次人与AI协作的探索之旅 (About This Project: A Journey of Human-AI Collaboration)**
 >
 > 本项目诞生于我（作者）与AI（Google Gemini 2.5 Pro）之间为期两日的、高强度的探索性对话。它并非一个计划周详的工程产品，而是一次“氛围驱动编程（Vibe Coding）”的真实记录。
 >
@@ -151,7 +239,7 @@ docker compose up --build
 > * **不承诺积极维护：** 作为这段学习旅程的记录者，我（原作者）将不再对这个仓库进行积极的功能维护或添加新功能。
 > * **欢迎Fork与重构：** 如果你对这个项目感兴趣，发现了其中的缺陷并希望改进它，或者希望在其基础上构建更强大的功能，**我非常欢迎并鼓励你 `Fork` 这个仓库，开启你自己的新分支，创造出属于你的版本。**
 
-#### **第四部分：最终反思 - 从“代码”到“对话”的辩证之旅**
+### **第四部分：最终反思 - 从“代码”到“对话”的辩证之旅**
 
 我们之前的技术性反思，指出了当前方案的种种“不完美”，这是一种**工程师视角下的线性思维**，追求一个客观上“更好”的系统。但这种反思本身，也可能陷入一种“为优化而优化”的陷阱。
 
