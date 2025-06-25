@@ -7,8 +7,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    environment:
-      - BACKEND_URL=http://backend:8000
     # 给这个容器起个名字，方便管理
     container_name: meeting_assistant_backend
     # 将我们本地的.env文件内容作为环境变量传给容器
@@ -32,6 +30,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    environment:
+      - BACKEND_URL=http://backend:8000
     container_name: meeting_assistant_frontend
     # 端口映射：将物理主机的8501端口映射到容器的8501端口
     ports:
