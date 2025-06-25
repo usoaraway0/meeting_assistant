@@ -5,7 +5,7 @@ ARG HF_ENDPOINT
 FROM python:3.12-slim AS builder
 
 # 将接收到的参数，设置为这个构建阶段的环境变量
-ENV HF_ENDPOINT=${HF_ENDPOINT}
+ENV HF_ENDPOINT=${HF_ENDPOINT:-https://huggingface.co}
 
 WORKDIR /app
 
