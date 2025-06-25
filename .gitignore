@@ -24,6 +24,6 @@ ENV/
 Thumbs.db
 
 # Local files
-/uploads/
-/knowledge_base_storage/
-/my_faiss_index/
+uploads/
+knowledge_base_storage/
+my_faiss_index/
