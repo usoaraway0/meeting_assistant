@@ -9,8 +9,6 @@ services:
       dockerfile: Dockerfile
       args:
         # 这种${VAR}语法允许我们在构建时传入环境变量
-        - HTTP_PROXY=${HTTP_PROXY}
-        - HTTPS_PROXY=${HTTPS_PROXY}
         - HF_ENDPOINT=${HF_ENDPOINT:-https://huggingface.co}
     # 给这个容器起个名字，方便管理
     container_name: meeting_assistant_backend

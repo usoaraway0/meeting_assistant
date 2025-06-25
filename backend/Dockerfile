@@ -1,20 +1,20 @@
 # 声明我们将从外部接收构建参数
-ARG HTTP_PROXY
-ARG HTTPS_PROXY
-ARG HF_ENDPOINT # <-- 新增
+ARG HF_ENDPOINT
 
 # Step 1: builder阶段
 FROM python:3.12-slim AS builder
 
 # 将接收到的参数，设置为这个构建阶段的环境变量
-ENV HTTP_PROXY=${HTTP_PROXY}
-ENV HTTPS_PROXY=${HTTPS_PROXY}
-ENV HF_ENDPOINT=${HF_ENDPOINT} # <-- 新增
+ENV HF_ENDPOINT=${HF_ENDPOINT}
 
 WORKDIR /app
 
 RUN pip install uv
 COPY requirements.txt .
+
+# 先从PyTorch官方的CPU版本专用源，安装torch和torchaudio
+# 确保我们下载的是不含任何NVDIA依赖的、轻量的CPU版本，避免uv下载超时。
+RUN uv pip install --system --no-cache torch torchaudio --index-url https://download.pytorch.org/whl/cpu
 RUN uv pip install --system --no-cache -r requirements.txt
 
 COPY download_model.py .
